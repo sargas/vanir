@@ -1,4 +1,4 @@
-var textArea = document.getElementById('testing_area');
+var contentArea = document.getElementById('content');
 
 var topics = ["Dust", "Galaxies/Galaxy Scale", "Planets/Brown Dwarfs",
 	"Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
@@ -17,7 +17,7 @@ function generate_catagory_box(id) {
 self.port.on("show", function onShow(payload) {
 	if(!payload[0]) return;
 	payload = payload[1];
-	textArea.innerHTML = "";
+	contentArea.innerHTML = "";
 
 	var form = document.createElement("form");
 	payload.forEach(function(tab, i, arr) {
@@ -59,5 +59,5 @@ self.port.on("show", function onShow(payload) {
 	});
 
 	form.appendChild(submitButton);
-	textArea.appendChild(form);
+	contentArea.appendChild(form);
 });
