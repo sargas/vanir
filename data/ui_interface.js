@@ -15,7 +15,10 @@ function generate_catagory_box(id) {
 }
 
 self.port.on("show", function onShow(payload) {
-	if (textArea.innerHTML != "") return;
+	if(!payload[0]) return;
+	payload = payload[1];
+	textArea.innerHTML = "";
+
 	var form = document.createElement("form");
 	payload.forEach(function(tab, i, arr) {
 		form.appendChild(document.createTextNode(tab.title));
@@ -57,5 +60,4 @@ self.port.on("show", function onShow(payload) {
 
 	form.appendChild(submitButton);
 	textArea.appendChild(form);
-	//console.log(textArea.innerHTML);
 });
