@@ -1,11 +1,11 @@
 var textArea = document.getElementById('testing_area');
 
-function generate_catagory_box(id) {
-	var topics = ["Dust", "Galaxies/Galaxy Scale", "Planets/Brown Dwarfs",
-		"Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
-		"High E./X-Rays", "ISM/HII/PDR", "Disks", "Feedback SF/AGN", "Other"];
+var topics = ["Dust", "Galaxies/Galaxy Scale", "Planets/Brown Dwarfs",
+	"Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
+	"High E./X-Rays", "ISM/HII/PDR", "Disks", "Feedback SF/AGN", "Other"];
 
-	var arr = ["<select name=\""+id+"-cat\">"];
+function generate_catagory_box(id) {
+	var arr = ["<select id=\""+id+"-cat\">"];
 	for each (var topic in topics) {
 		selected = (topic === "Other")
 		arr.push("\t<option selected=\""+ selected +"\">"+topic+"</option>");
@@ -15,13 +15,47 @@ function generate_catagory_box(id) {
 }
 
 self.port.on("show", function onShow(payload) {
-	text = "<form>";
-	for each (var tab in payload) {
-		text += tab.title + "<br/>\n" + tab.url + "\n<br/>";
-		text += generate_catagory_box("43");
-		text += "<br/>";
-	}
-	text += "</form>";
-	textArea.innerHTML = text;
-	console.log(text);
+	if (textArea.innerHTML != "") return;
+	var form = document.createElement("form");
+	payload.forEach(function(tab, i, arr) {
+		form.appendChild(document.createTextNode(tab.title));
+		form.appendChild(document.createElement("br"));
+		form.appendChild(document.createTextNode(tab.url));
+		form.appendChild(document.createElement("br"));
+
+		var finalText = document.createElement('input');
+		finalText.type = 'hidden';
+		finalText.id = 'finalText-'+i;
+		finalText.value = tab.title + "\n" + tab.url;
+
+		form.appendChild(finalText);
+		form.innerHTML += generate_catagory_box(i);
+		form.appendChild(document.createElement("br"));
+	});
+
+	var submitButton = document.createElement('button');
+	submitButton.type = "button";
+	submitButton.textContent = "Save";
+	submitButton.addEventListener('click', function() {
+		var counter = 0;
+		var entries = {};
+		for each (var topic in topics)
+			entries[topic] = [];
+
+		while(true) {
+			finalText = document.getElementById("finalText-"+counter);
+			if (finalText === null)
+				break;
+			text = finalText.value;
+			catagory = document.getElementById(counter + '-cat').value;
+			counter++;
+
+			entries[catagory].push(text);
+		}
+		self.port.emit("saveEntries", entries);
+	});
+
+	form.appendChild(submitButton);
+	textArea.appendChild(form);
+	//console.log(textArea.innerHTML);
 });
