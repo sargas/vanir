@@ -1,6 +1,6 @@
 var contentArea = document.getElementById('content');
 
-var topics = ["Dust", "Galaxies/Galaxy Scale", "Planets/Brown Dwarfs",
+var topics = ["Bag Lunch", "Dust", "Galaxies/Galaxy Scale", "Planets/Brown Dwarfs",
 	"Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
 	"High E./X-Rays", "ISM/HII/PDR", "Disks", "Feedback SF/AGN", "Other"];
 
