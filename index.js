@@ -5,8 +5,8 @@ var { Panel } = require('sdk/panel');
 var iofile = require('sdk/io/file');
 var need_update = true;
 
-var topics = ["Bag Lunch", "Crackpot", "Dust", "Galaxies/Galaxy Scale", "Planets/Brown Dwarfs",
-        "Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
+var topics = ["Bag Lunch", "Crackpot", "Dust", "Galaxies/Galaxy Scale", "Instrumentation",
+	    "Planets/Brown Dwarfs", "Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
         "High E./X-Rays", "ISM/HII/PDR", "Disks", "Feedback SF/AGN", "Other Stars / Binaries", "Other"];
 
 var button = buttons.ActionButton({
