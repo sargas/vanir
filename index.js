@@ -1,7 +1,8 @@
 var buttons = require('sdk/ui/button/action');
 var tabs = require('sdk/tabs');
-var { data } = require('sdk/self');
-var { Panel } = require('sdk/panel');
+const { Panel } = require('sdk/panel');
+const { ToggleButton } = require('sdk/ui/button/toggle');
+const { browserWindows } = require('sdk/windows');
 var iofile = require('sdk/io/file');
 var need_update = true;
 
@@ -9,18 +10,45 @@ var topics = ["Bag Lunch", "Computational Methods", "Crackpot", "Dust", "Galaxie
 	    "Planets/Brown Dwarfs", "Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
         "High E./X-Rays", "ISM/HII/PDR", "Disks", "Feedback SF/AGN", "Other Stars / Binaries", "Other"];
 
-var button = buttons.ActionButton({
+var button = ToggleButton({
 	id: "vanir",
-	label: "Save Astro-ph topics",
-	icon: data.url('save.svg'),
-	onClick: function(state) {
-		ui_interface.show();
+	label: "UToledo Hotter Topics",
+	icon: './save.svg',
+	onChange: handleToggleButton
+});
+
+var button_panel = Panel({
+	contentURL: './popup_interface.html',
+	contentScriptFile: './popup_interface.js',
+	onHide: handleHidePanel
+});
+
+function handleToggleButton(state) {
+	if (state.checked) {
+		button_panel.show({
+			position: button
+		});
+	} else {
+		button_panel.hide();
+		handleHidePanel();
 	}
+}
+
+function handleHidePanel() {
+	button.state("window", {checked: false});
+}
+
+button_panel.port.on('open-astroph', function() {
+	browserWindows.open('http://arxiv.org/list/astro-ph/pastweek?show=1000');
+});
+
+button_panel.port.on('save-astroph', function() {
+	ui_interface.show();
 });
 
 var ui_interface = Panel({
-	contentURL: data.url('ui_interface.html'),
-	contentScriptFile: data.url('ui_interface.js'),
+	contentURL: './ui_interface.html',
+	contentScriptFile: './ui_interface.js',
 	width: 700,
 	height: 500
 });
@@ -75,8 +103,3 @@ tabs.on('ready', function(tab) {
 		need_update = true;
 	}
 });
-
-exports.main = function(options, callbacks) {
-	for each (var tab in tabs)
-		tab.url = 'http://arxiv.org/list/astro-ph/pastweek?show=1000';
-};
