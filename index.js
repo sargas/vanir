@@ -5,6 +5,10 @@ const { ToggleButton } = require('sdk/ui/button/toggle');
 const { browserWindows } = require('sdk/windows');
 var iofile = require('sdk/io/file');
 var need_update = true;
+const {prefs} = require('sdk/simple-prefs');
+var self = require('sdk/self');
+const { notify } = require('sdk/notifications');
+var url = require('sdk/url');
 
 var topics = ["Bag Lunch", "Computational Methods", "Crackpot", "Dust", "Galaxies/Galaxy Scale", "Instrumentation",
 	    "Planets/Brown Dwarfs", "Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
@@ -43,8 +47,31 @@ button_panel.port.on('open-astroph', function() {
 });
 
 button_panel.port.on('save-astroph', function() {
-	ui_interface.show();
+	if (prefs.savePath === undefined) {
+		notify({
+			title: "No save path for hotter topics posts",
+			text: "Click here to open addon prefs",
+			onClick: openPrefs
+		});
+	} else {
+		ui_interface.show();
+	}
 });
+
+function openPrefs() {
+	tabs.open({
+		url: 'about:addons',
+		onReady: function(tab) {
+			tab.attach({
+				contentScriptWhen: 'end',
+				contentScript: 'AddonManager.getAddonByID("' + self.id + '", function(aAddon) {' +
+					'unsafeWindow.gViewController.commands.cmd_showItemDetails.doCommand(aAddon, true);});'
+			});
+		}
+	});
+}
+
+button_panel.port.on('open-prefs', openPrefs);
 
 var ui_interface = Panel({
 	contentURL: './ui_interface.html',
@@ -58,7 +85,7 @@ ui_interface.on("show", function() {
 	for each (var tab in tabs) {
 		newtab:
 		if (/arxiv\.org\/abs\//.test(tab.url)) {
-			title = tab.title.replace(/^\[[0-9\.]*\] /, '');
+			var title = tab.title.replace(/^\[[0-9\.]*\] /, '');
 			for each (var old_obj in payload) {
 				if (old_obj.url === tab.url) break newtab;
 			}
@@ -91,11 +118,19 @@ ui_interface.port.on('saveEntries', function(entries) {
 		}
 	}
 
-	iofile.mkpath('/home/joe/hotter-topics/');
-	var fh = iofile.open('/home/joe/hotter-topics/vanir-' + Date.now(), mode='w');
+	iofile.mkpath(prefs.savePath);
+	var new_path = iofile.join(prefs.savePath, 'vanir-' + Date.now());
+	var fh = iofile.open(new_path, 'w');
 	fh.write(text);
 	fh.close();
 	ui_interface.hide();
+	notify({
+		title: "Hotter Topics Email Saved",
+		text: "Click here to open.",
+		onClick: function() {
+			tabs.open(url.fromFilename(new_path));
+		}
+	});
 });
 
 tabs.on('ready', function(tab) {
