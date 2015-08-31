@@ -23,8 +23,14 @@ var button = ToggleButton({
 
 var button_panel = Panel({
 	contentURL: './popup_interface.html',
-	contentScriptFile: './popup_interface.js',
-	onHide: handleHidePanel
+	contentScriptFile: ['./popup_interface.js', './windowsize.js'],
+	onHide: handleHidePanel,
+	onShow: function() {
+		button_panel.port.emit('fetchwinsize');
+	}
+});
+button_panel.port.on('winsize', function(data) {
+	button_panel.resize(data.width, data.height);
 });
 
 function handleToggleButton(state) {
