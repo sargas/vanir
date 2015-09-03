@@ -79,6 +79,16 @@ function openPrefs() {
 
 button_panel.port.on('open-prefs', openPrefs);
 
+button_panel.port.on('launch-help', function() {
+	help_panel.show();
+});
+
+var help_panel = Panel({
+	contentURL: './help.html',
+	width: 700,
+	height: 500
+});
+
 var ui_interface = Panel({
 	contentURL: './ui_interface.html',
 	contentScriptFile: './ui_interface.js',
