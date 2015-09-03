@@ -1,11 +1,12 @@
 {
   "name": "vanir",
-  "title": "vanir",
+  "title": "UToledo Hotter Topics Manager",
   "id": "jid1-PLCrIBopLsgxHw@jetpack",
-  "description": "a basic add-on",
-  "author": "",
-  "license": "MPL 2.0",
+  "description": "A manager for the hotter topics discussion group at the University Of Toledo's Department of Physics and Astronomy.",
+  "author": "Joseph Booker <joe@neoturbine.net>",
+  "license": "GPL 3.0+",
   "version": "0.0.1",
+  "icon": "./icon.svg",
 
   "preferences": [{
 	  "name": "savePath",

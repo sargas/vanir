@@ -17,7 +17,7 @@ var topics = ["Bag Lunch", "Computational Methods", "Crackpot", "Dust", "Galaxie
 var button = ToggleButton({
 	id: "vanir",
 	label: "UToledo Hotter Topics",
-	icon: './save.svg',
+	icon: './icon.svg',
 	onChange: handleToggleButton
 });
 

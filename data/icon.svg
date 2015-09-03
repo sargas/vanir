@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 0 48 48" width="48" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<defs>
+<filter id="a" style="color-interpolation-filters:sRGB">
+<feTurbulence numOctaves="2" seed="260" type="turbulence" baseFrequency="0.21400000000000013 0.073000000000000037"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 2 0 0 0 0 0 0 0 0 0 3 0 0 0 0 "/>
+<feGaussianBlur seed="268" stdDeviation="0.19999999999999996 2"/>
+</filter>
+</defs>
+<g stroke-width="0">
+<rect height="48.285" width="48.285" y=".017754" x="-6.7436e-7"/>
+<rect transform="matrix(.83555 0 0 .83580 .23724 7.4692)" height="47.857" filter="url(#a)" width="47.857" y="-4" x="4.5714"/>
+</g>
+</svg>
