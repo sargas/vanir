@@ -2,9 +2,9 @@ var contentArea = document.getElementById('content');
 
 function generate_catagory_box(id, topics) {
 	var arr = ["<select id=\""+id+"-cat\">"];
+	arr.push("\t<option selected=\"True\">--- Skip ---</option>");
 	for each (var topic in topics) {
-		var selected = (topic === "Other")
-		arr.push("\t<option selected=\""+ selected +"\">"+topic+"</option>");
+		arr.push("\t<option>"+topic+"</option>");
 	}
 	arr.push("</select>");
 	return arr.join("\n");
@@ -46,9 +46,11 @@ self.port.on("show", function onShow(payload) {
 				break;
 			var text = finalText.value;
 			var catagory = document.getElementById(counter + '-cat').value;
-			counter++;
 
-			entries[catagory].push(text);
+			if (catagory !== '--- Skip ---')
+				entries[catagory].push(text);
+
+			counter++;
 		}
 		self.port.emit("saveEntries", entries);
 	});
