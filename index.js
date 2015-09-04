@@ -1,14 +1,12 @@
-var buttons = require('sdk/ui/button/action');
-var tabs = require('sdk/tabs');
+let tabs = require('sdk/tabs');
 const { Panel } = require('sdk/panel');
 const { ToggleButton } = require('sdk/ui/button/toggle');
-const { browserWindows } = require('sdk/windows');
-var iofile = require('sdk/io/file');
-var need_update = true;
-const {prefs} = require('sdk/simple-prefs');
-var self = require('sdk/self');
+let iofile = require('sdk/io/file');
+let need_update = true;
+const { prefs } = require('sdk/simple-prefs');
+let self = require('sdk/self');
 const { notify } = require('sdk/notifications');
-var url = require('sdk/url');
+let url = require('sdk/url');
 
 var topics = ["Bag Lunch", "Computational Methods", "Crackpot", "Dust", "Galaxies/Galaxy Scale", "Instrumentation",
 	    "Planets/Brown Dwarfs", "Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
@@ -29,6 +27,7 @@ var button_panel = Panel({
 		button_panel.port.emit('fetchwinsize');
 	}
 });
+
 button_panel.port.on('winsize', function(data) {
 	button_panel.resize(data.width, data.height);
 });
@@ -49,7 +48,10 @@ function handleHidePanel() {
 }
 
 button_panel.port.on('open-astroph', function() {
-	browserWindows.open('http://arxiv.org/list/astro-ph/pastweek?show=1000');
+	tabs.open({
+		url: 'http://arxiv.org/list/astro-ph/pastweek?show=1000',
+		inNewWindow: true
+	});
 });
 
 button_panel.port.on('save-astroph', function() {
@@ -69,7 +71,6 @@ function openPrefs() {
 		url: 'about:addons',
 		onReady: function(tab) {
 			tab.attach({
-				contentScriptWhen: 'end',
 				contentScript: 'AddonManager.getAddonByID("' + self.id + '", function(aAddon) {' +
 					'unsafeWindow.gViewController.commands.cmd_showItemDetails.doCommand(aAddon, true);});'
 			});
@@ -86,7 +87,7 @@ button_panel.port.on('launch-help', function() {
 var help_panel = Panel({
 	contentURL: './help.html',
 	width: 700,
-	height: 500
+	height: 300
 });
 
 var ui_interface = Panel({
@@ -97,7 +98,7 @@ var ui_interface = Panel({
 });
 
 ui_interface.on("show", function() {
-	var payload = []
+	let payload = []
 	for each (var tab in tabs) {
 		newtab:
 		if (/arxiv\.org\/abs\//.test(tab.url)) {
@@ -121,9 +122,9 @@ ui_interface.on("show", function() {
 });
 
 ui_interface.port.on('saveEntries', function(entries) {
-	var DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-	var text = "[title "+DAY_NAMES[new Date().getDay()] + " Papers]\n";
-	var counter = 1;
+	let DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+	let text = "[title "+DAY_NAMES[new Date().getDay()] + " Papers]\n";
+	let counter = 1;
 	for each (var topic in topics) {
 		if (entries[topic].length > 0) {
 			text += topic + "\n\n";
@@ -135,8 +136,9 @@ ui_interface.port.on('saveEntries', function(entries) {
 	}
 
 	iofile.mkpath(prefs.savePath);
-	var new_path = iofile.join(prefs.savePath, 'vanir-' + Date.now());
-	var fh = iofile.open(new_path, 'w');
+	let date_string = (new Date()).toISOString();
+	let new_path = iofile.join(prefs.savePath, 'vanir-' + date_string);
+	let fh = iofile.open(new_path, 'w');
 	fh.write(text);
 	fh.close();
 	ui_interface.hide();
