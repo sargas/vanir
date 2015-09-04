@@ -118,7 +118,7 @@ ui_interface.on("show", function() {
 		topics: topics,
 		tabs: payload
 	});
-	need_update = true;
+	need_update = false;
 });
 
 ui_interface.port.on('saveEntries', function(entries) {

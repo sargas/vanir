@@ -1,3 +1,5 @@
 # Flash crashes
 C:\\nppdf32Log\\debuglog.txt
+
 **/*.swp
+*.xpi
