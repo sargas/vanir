@@ -9,7 +9,7 @@ const { notify } = require('sdk/notifications');
 let url = require('sdk/url');
 
 var topics = ["Bag Lunch", "Computational Methods", "Crackpot", "Dust", "Galaxies/Galaxy Scale", "Instrumentation",
-	    "Planets/Brown Dwarfs", "Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
+	    "Massive Stars", "Planets/Brown Dwarfs", "Protostellar/Pre-MS Stars", "Star Formation", "Stellar Clusters/Populations",
         "High E./X-Rays", "ISM/HII/PDR", "Disks", "Feedback SF/AGN", "Other Stars / Binaries", "Other"];
 
 var button = ToggleButton({
